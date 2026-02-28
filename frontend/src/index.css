@@ -348,7 +348,7 @@ body {
   padding: 4px 10px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
 }
 
 .stat-chip.active {
@@ -389,6 +389,10 @@ body {
   color: rgba(255, 255, 255, 0.85);
   caret-color: #a78bfa;
   min-height: 0;
+  /* Isolate repaints so the rest of the page isn't affected on every keystroke */
+  contain: strict;
+  /* Disable any inherited transitions that could delay character rendering */
+  transition: none;
 }
 
 .manuscript-textarea::placeholder {

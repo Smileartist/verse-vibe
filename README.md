@@ -1,5 +1,5 @@
 VerseVibe: An AI-Powered Writing Companion
-VerseVibe is a specialized editor designed for poets and writers. It uses the Gemini 1.5 Flash API to act as "TalkingBuddy," providing empathetic, real-time sentiment analysis and pacing advice. The application features a sentiment-reactive UI where the interface colors shift dynamically to match the emotional tone of the writing.
+VerseVibe is a specialized editor designed for poets and writers. It uses the Gemini 2.5 Flash API to act as "TalkingBuddy," providing empathetic, real-time sentiment analysis and pacing advice. The application features a sentiment-reactive UI where the interface colors shift dynamically to match the emotional tone of the writing.
 
 This project was built as a technical assessment for Better, specifically tailored to align with the Smile Artist brand.
 
@@ -10,7 +10,7 @@ Backend: Python 3.10+, Flask API.
 
 Database: SQLite (Relational) via SQLAlchemy ORM.
 
-AI Integration: Google Gemini 1.5 Flash.
+AI Integration: Google Gemini 2.5 Flash.
 
 🛠️ Key Technical Decisions
 1. Decoupled Architecture

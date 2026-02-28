@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import {
@@ -216,8 +216,8 @@ export default function App() {
   const updateSetting = (key, value) =>
     setSettings(prev => ({ ...prev, [key]: value }));
 
-  const words = countWords(content);
-  const chars = content.length;
+  const words = useMemo(() => countWords(content), [content]);
+  const chars = useMemo(() => content.length, [content]);
 
   // ── Update theme when result changes ────────────────────────────────────
   useEffect(() => {
@@ -281,13 +281,17 @@ export default function App() {
     if (activePanel === 'history') fetchHistory();
   }, [activePanel]);
 
+  // Keep a stable ref to handleAnalyze so the keydown listener
+  // never needs to be re-registered on every content change.
+  const handleAnalyzeRef = useRef(handleAnalyze);
+  useEffect(() => { handleAnalyzeRef.current = handleAnalyze; });
   useEffect(() => {
     const handler = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') handleAnalyze();
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') handleAnalyzeRef.current();
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [content]);
+  }, []); // ← empty dep: registered once, never torn down & rebuilt on keystrokes
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
@@ -457,14 +461,12 @@ export default function App() {
               <div className="editor-meta">
                 <span className="editor-title">Manuscript</span>
                 <div className="editor-stats">
-                  <motion.span
+                  <span
                     className={`stat-chip ${words > 0 ? 'active' : ''}`}
                     style={words > 0 ? { color: theme.accent, borderColor: `${theme.accent}44`, background: `${theme.accent}10` } : {}}
-                    animate={{ scale: words > 0 ? [1, 1.06, 1] : 1 }}
-                    transition={{ duration: 0.3 }}
                   >
                     {words} word{words !== 1 ? 's' : ''}
-                  </motion.span>
+                  </span>
                   <span
                     className={`stat-chip ${chars > 0 ? 'active' : ''}`}
                     style={chars > 0 ? { color: theme.accent, borderColor: `${theme.accent}44`, background: `${theme.accent}10` } : {}}
